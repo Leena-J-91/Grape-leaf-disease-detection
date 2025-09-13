@@ -129,10 +129,22 @@ def get_background_image():
 @st.cache_resource
 def load_ml_model():
     try:
-        model = load_model('grape_disease_classifier.h5', compile=False)
+        # Try different model loading approaches
+        model_path = 'grape_disease_classifier.h5'
+        
+        # Check if model file exists
+        import os
+        if not os.path.exists(model_path):
+            st.error(f"Model file not found: {model_path}")
+            return None
+            
+        # Load model with error handling
+        model = load_model(model_path, compile=False)
+        st.success("Model loaded successfully!")
         return model
     except Exception as e:
         st.error(f"Error loading model: {e}")
+        st.error("Please ensure the model file is in the root directory")
         return None
 
 # Prepare image for prediction

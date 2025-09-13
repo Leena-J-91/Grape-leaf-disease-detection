@@ -1,0 +1,16 @@
+# Ignore large files that aren't needed for Streamlit
+Dataset/
+templates/
+README*.md
+*.md
+.git/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
