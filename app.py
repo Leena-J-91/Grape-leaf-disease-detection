@@ -36,7 +36,13 @@ def predict():
     predicted_class = np.argmax(predictions, axis=1)
 
     result = categories[predicted_class[0]]
-    return jsonify({'prediction': result})
+    confidence = float(np.max(predictions))
+    return jsonify({
+        'prediction': result,
+        'confidence': confidence,
+        'status': 'success'
+    })
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=False)
