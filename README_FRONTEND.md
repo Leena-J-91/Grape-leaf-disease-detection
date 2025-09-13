@@ -217,3 +217,4 @@ After successful deployment:
 4. Consider upgrading to paid plans for production use
 
 Your frontend is now live and connected to your backend API!
+

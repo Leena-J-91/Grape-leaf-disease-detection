@@ -1,0 +1,33 @@
+# Ignore the original Flask app
+app.py
+
+# Ignore the dataset (too large for Vercel)
+Dataset/
+
+# Ignore Docker files
+Dockerfile
+
+# Ignore git files
+.git/
+repo-mirror/
+
+# Ignore environment files
+env.example
+.env
+
+# Ignore documentation
+README_BACKEND.md
+README_FRONTEND.md
+deploy-setup.md
+
+# Ignore Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/

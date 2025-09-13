@@ -126,3 +126,4 @@ After successful deployment:
 3. Test the API endpoints to ensure they work correctly
 
 Your backend is now ready to serve your frontend application!
+
