@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "grape-disease-detection"
+version = "1.0.0"
+description = "Grape Leaf Disease Detection using Streamlit and TensorFlow"
+requires-python = ">=3.8,<3.12"
+dependencies = [
+    "streamlit",
+    "tensorflow",
+    "numpy",
+    "Pillow",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["*"]
