@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grape Leaf Disease Scanner</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-image: url(static/image3.jpeg);
+      background-size: cover; /* Ensures the image covers the entire background */
+      background-position: center; /* Centers the image */
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background for readability */
+      color: #333;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      text-align: center;
+    }
+    h2 {
+      color: #4CAF50;
+    }
+    input[type="file"] {
+      font-size: 16px;
+      margin: 15px 0;
+      padding: 10px;
+      border: 2px solid #4CAF50;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button {
+      font-size: 16px;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-top: 10px;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #388E3C;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f4f4f4;
+      color: #333;
+      border-radius: 5px;
+      font-size: 18px;
+    }
+    .treatment {
+      margin-top: 20px;
+      text-align: left;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    .treatment h4 {
+      color: #329635;
+    }
+  </style>
+  
+</head>
+<body>
+  <div class="container">
+    <h2>ದ್ರಾಕ್ಷಿ ಎಲೆ ರೋಗ ಸ್ಕ್ಯಾನರ್</h2>
+    <p>ಅದರ ಆರೋಗ್ಯವನ್ನು ಪತ್ತೆಹಚ್ಚಲು ಮತ್ತು ಚಿಕಿತ್ಸೆಯ ಶಿಫಾರಸುಗಳನ್ನು ಪಡೆಯಲು ದ್ರಾಕ್ಷಿ ಎಲೆಯ ಚಿತ್ರವನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ.</p>
+    <form id="uploadForm">
+      <input type="file" id="imageInput" name="image" accept="image/*" required />
+      <br />
+      <button type="submit">ಚಿತ್ರವನ್ನು ಸ್ಕ್ಯಾನ್ ಮಾಡಿ</button>
+    </form>
+    <div id="result" class="result"></div>
+    <div id="treatment" class="treatment"></div>
+  </div>
+
+  <!-- Load configuration -->
+  <script src="../static/config.js"></script>
+  
+  <script>
+    document.getElementById("uploadForm").addEventListener("submit", async function(event) {
+      event.preventDefault();
+      const formData = new FormData();
+      formData.append("image", document.getElementById("imageInput").files[0]);
+
+      // Use configurable API URL
+      const apiUrl = window.APP_CONFIG.API_URL + window.APP_CONFIG.ENDPOINTS.PREDICT;
+      
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await response.json();
+
+      const resultDiv = document.getElementById("result");
+      const treatmentDiv = document.getElementById("treatment");
+
+      if (result.prediction) {
+        const prediction = result.prediction;
+
+        // Display prediction
+        resultDiv.innerText = `ಊಹಿಸಿದ ರೋಗ: ${prediction}`;
+
+        // Show treatment recommendations
+        let treatment = "";
+        if (prediction === "Black Measles Disease") {
+          treatment = `
+          <h1>ಬ್ಲಾಕ್ ಮೀಸಲ್ಸ್ ರೋಗ</h1>
+          <h3> ಬ್ಲಾಕ್ ಮೀಸಲ್ಸ್ ರೋಗಕ್ಕೆ ಚಿಕಿತ್ಸೆ: </h3>
+            <h4> ರಾಸಾಯನಿಕ ಗೊಬ್ಬರಗಳ ಚಿಕಿತ್ಸೆಗಳು:-</h4>
+            <ul>
+              <li> ಪೊಟಾಷಿಯಮ್ ಸಲ್ಫೇಟ್: ಒಟ್ಟಾರೆ ದ್ರಾಕ್ಷಿ ಬೆಳ್ಳೆಹೊಕ್ಕಿನ ಆರೋಗ್ಯವನ್ನು ಸುಧಾರಿಸುತ್ತದೆ ಮತ್ತು ರೋಗ ಪ್ರತಿರೋಧಕ ಶಕ್ತಿಯನ್ನು ಹೆಚ್ಚಿಸುತ್ತದೆ.</li>
+              <li> ಮ್ಯಾಗ್ನೀಷಿಯಮ್ ಸಲ್ಫೇಟ್: ಮ್ಯಾಗ್ನೀಷಿಯಮ್ ಕೊರತೆಯನ್ನು ಸರಿಪಡಿಸುತ್ತದೆ ಮತ್ತು ಎಲೆಗಳಲ್ಲಿ ಹಚ್ಚುಕೊಲೆ (ಕ್ಲೋರೋಸಿಸ್) ತಡೆಯುತ್ತದೆ.</li>
+              <li> ಜಿಂಕ್ ಸಲ್ಫೇಟ್: ಬೆಳ್ಳೆಹೊಕ್ಕಿನ ಬೆಳವಣಿಗೆಯನ್ನು ಹೆಚ್ಚಿಸುತ್ತದೆ ಮತ್ತು ಶಿಲೀಂಧ್ರದ ಸೋಂಕುಗಳಿಗೆ ಪ್ರತಿರೋಧಶಕ್ತಿಯನ್ನು ಬಲಪಡಿಸುತ್ತದೆ.</li>
+            </ul>
+              <h4>ಸಾವಯವ ಚಿಕಿತ್ಸೆ:-</h4>
+            <ul>
+              <li> ಬೇವಿನ ಎಣ್ಣೆ ಸ್ಪ್ರೇ: ಎಲೆಗಳಲ್ಲಿ ಶಿಲೀಂಧ್ರದ ಬೆಳವಣಿಗೆಯನ್ನು ಕಡಿಮೆ ಮಾಡುತ್ತದೆ ಮತ್ತು ಸಸ್ಯದ ರೋಗ ನಿರೋಧಕ ಶಕ್ತಿಯನ್ನು ಹೆಚ್ಚಿಸುತ್ತದೆ.</li>
+              <li> ಬೋರ್ಡೆಕ್ಸ್ ಮಿಶ್ರಣ: ಶಿಲೀಂಧ್ರದ ಸೋಂಕಿನಿಂದ ಎಲೆಗಳನ್ನು ರಕ್ಷಿಸಲು ತಾಮ್ರ ಆಧಾರಿತ ದ್ರಾವಣವನ್ನು ಅನ್ವಯಿಸಿ.</li>
+              <li> ಕಾಂಪೋಸ್ಟ್ ಟೀ: ಸಸ್ಯದ ಆರೋಗ್ಯ ಮತ್ತು ಮೈಕ್ರೋಬಿಯಲ್ ಚಟುವಟಿಕೆಯನ್ನು ಉತ್ತೇಜಿಸಲು ಹೂವಿನ ಸ್ಪ್ರೇ ಆಗಿ ಬಳಸಿರಿ.</li>
+              <a href="https://www.youtube.com/watch?v=leUDkwJuz1o&pp=ygUfZ3JhcGUgcGxhbnQgdHJlYXRtZW50IGluIGthbm5kYQ%3D%3D" target="_blank">youtube ಲಿಂಕ್ (fertilizer)</a>
+            </ul>`
+            ;
+        } else if (prediction === "Black Rot Disease") {
+          treatment = `
+            <h1>ಬ್ಲಾಕ್ ರೋಟ್ ರೋಗ</h1>
+            <h3> ಬ್ಲಾಕ್ ರೋಟ್ ರೋಗಕ್ಕೆ ಚಿಕಿತ್ಸೆ:</h3>
+            <h4> ರಾಸಾಯನಿಕ ಗೊಬ್ಬರಗಳ ಚಿಕಿತ್ಸೆಗಳು:-</h4>
+            <ul>
+              <li> ಸಮತೋಲಿತ ಎರೆಹುಡಿ: ಸಸ್ಯದ ಆರೋಗ್ಯ ಮತ್ತು ರೋಗ ಪ್ರತಿರೋಧ ಶಕ್ತಿಯನ್ನು ಸುಧಾರಿಸಲು 10-10-10 NPK ಎರೆಹುಡಿ ಬಳಸಿ.</li>
+              <li> ಕ್ಯಾಲ್ಸಿಯಮ್ ನೈಟ್ರೇಟ್ ಸ್ಪ್ರೇ: ಪ್ರತಿ ಎರಡು ವಾರಕ್ಕೊಮ್ಮೆ 2-3 ಗ್ರಾಂ ಕ್ಯಾಲ್ಸಿಯಮ್ ನೈಟ್ರೇಟ್ ಅನ್ನು ಪ್ರತಿ ಲೀಟರ್ ನೀರಿನಲ್ಲಿ घೋಳಿಸಿ, ಎಲೆಕೋಶಗಳನ್ನು ಬಲಪಡಿಸಿ.</li>
+              <li> ಪೊಟಾಷಿಯಮ್ ಸಲ್ಫೇಟ್: ಪ್ರತಿಯೊಂದು ಏಕರಿಗೆ 20-25 ಕೆ.ಜಿ ಪೊಟಾಷಿಯಮ್ ಸಲ್ಫೇಟ್ ಅನ್ನು ಅನ್ವಯಿಸಿ, ಪ್ರತಿರೋಧಶಕ್ತಿಯನ್ನು ಮತ್ತು ಬೆಳವಣಿಗೆಯನ್ನು ಹೆಚ್ಚಿಸು.</li>
+            </ul>
+              <h4> ಸಾವಯವ ಚಿಕಿತ್ಸೆ:-</h4>
+            <ul>
+              <li> ಬೇವಿನ ಎಣ್ಣೆ ಸ್ಪ್ರೇ: ಪ್ರತಿಯೊಂದು ಲೀಟರ್ ನೀರಿನಲ್ಲಿ 2-3 ಟೀಸ್ಪೂನ್ ನೀಮ್ ಎಣ್ಣೆ ಹಾಕಿ, ಶಿಲೀಂಧ್ರದ ಬೆಳವಣಿಗೆಯನ್ನು ತಡೆಯಿರಿ.</li>
+              <li> ಅಡಿಗೆ ಸೋಡಾ : ಪ್ರತಿ ಎರಡು ವಾರಕ್ಕೆ 1 ಟೇಬಲ್ ಸ್ಪೂನ್ ಬೇಕಿಂಗ್ ಸೋಡಾ, 1 ಟೀಸ್ಪೂನ್ ಎಣ್ಣೆ ಮತ್ತು 1 ಲೀಟರ್ ನೀರಿನ ಮಿಶ್ರಣವನ್ನು ಸ್ಪ್ರೇ ಮಾಡಿ.</li>
+              <li> ಬೆಳ್ಳುಳ್ಳಿ ಸಾರ ಸ್ಪ್ರೇ: ಹೋಳಿಯನ್ನು ಮಿಕ್ಸ್ ಮಾಡಿ ಮತ್ತು ನೀರಿನಲ್ಲಿ ಹದವಾಗಿ ಕರಿದು, ಪ್ರತಿ ವಾರಕ್ಕೆ ಪ್ರಕೃತಿಕ ಫಂಗಸ್ ವಿರೋಧಿ ಚಿಕಿತ್ಸೆ म्हणून ಸ್ಪ್ರೇ ಮಾಡಿ.</li>
+              <a href="https://www.youtube.com/watch?v=leUDkwJuz1o&pp=ygUfZ3JhcGUgcGxhbnQgdHJlYXRtZW50IGluIGthbm5kYQ%3D%3D" target="_blank">youtube ಲಿಂಕ್ (fertilizer)</a>
+              </ul>`;
+        } else if (prediction === "Leaf Blight Disease") {
+          treatment = `
+            <h1>ಬ್ಲೈಟ್ ರೋಗ</h1>
+            <h3>ಬ್ಲೈಟ್ ರೋಗಕ್ಕೆ ಚಿಕಿತ್ಸೆ:</h3>
+            <h4> ರಾಸಾಯನಿಕ ಗೊಬ್ಬರಗಳ ಚಿಕಿತ್ಸೆಗಳು:-</h4>
+            <ul>
+              <li> ಸಮತೋಲಿತ NPK ಎರೆಹುಡಿ: ಒಟ್ಟಾರೆ ಸಸ್ಯದ ಆರೋಗ್ಯವನ್ನು ಸುಧಾರಿಸುತ್ತದೆ, ರೋಗಗಳಿಗೆ ಪ್ರತಿರೋಧಶಕ್ತಿಯನ್ನು ಹೆಚ್ಚಿಸುತ್ತದೆ.</li>
+              <li> ಪೊಟಾಷಿಯಮ್ ಸಲ್ಫೇಟ್: ಸಸ್ಯದ ಕೋಶಭಿತ್ತಿಗಳನ್ನು ಬಲಪಡಿಸುತ್ತದೆ, ಇದರಿಂದ ಶಿಲೀಂಧ್ರ ಸೋಂಕುಗಳಿಗೆ ಪ್ರತಿರೋಧವನ್ನೂ ಹೆಚ್ಚಿಸುತ್ತದೆ.</li>
+              <li> ಮ್ಯಾಗ್ನೀಷಿಯಮ್ ಸಲ್ಫೇಟ್: ಮ್ಯಾಗ್ನೀಷಿಯಮ್ ಕೊರತೆಯನ್ನು ತಡೆಯುತ್ತದೆ, ಇದು ಸಸ್ಯಗಳನ್ನು ಒತ್ತಡ ಮತ್ತು ರೋಗಗಳಿಗೆ ಹೆಚ್ಚು ಪ್ರತಿಕೂಲವಾಗಿಸುವುದನ್ನು ತಡೆಯುತ್ತದೆ.</li>
+            </ul>
+              <h4>ಸಾವಯವ ಚಿಕಿತ್ಸೆ:-</h4>
+            <ul>
+              <li> ಬೇವಿನ ಎಣ್ಣೆ: ಪ್ರಕೃತಿಕ ಫಂಗಿಸೈಡ್ ಆಗಿದ್ದು, ಎಲೆಗಳಲ್ಲಿ ಶಿಲೀಂಧ್ರ ಬೆಳವಣಿಗೆಯನ್ನು ನಿಯಂತ್ರಿಸಲು ಸಹಾಯ ಮಾಡುತ್ತದೆ.</li>
+              <li> ಬೋರ್ಡೋ ಮಿಶ್ರಣ: ತಾಮ್ರ ಆಧಾರಿತ ದ್ರಾವಣ, ಇದು ಎಲೆಗಳನ್ನು ಶಿಲೀಂಧ್ರ ಸೋಂಕುಗಳಿಂದ ರಕ್ಷಿಸುತ್ತದೆ.</li>
+              <li> ಹಾರ್ಸ್ಟೇಲ್ ಸಾರ: ಪ್ರಕೃತಿಕ ಫಂಗಸ್ ವಿರೋಧಿಯಾಗಿ ಕಾರ್ಯನಿರ್ವಹಿಸುತ್ತದೆ ಮತ್ತು ಸಸ್ಯದ ರೋಗಕಾರಕಗಳ ವಿರುದ್ಧ ರಕ್ಷಣೆ ಬಲಪಡಿಸುತ್ತದೆ.</li>
+              <a href="https://www.youtube.com/watch?v=leUDkwJuz1o&pp=ygUfZ3JhcGUgcGxhbnQgdHJlYXRtZW50IGluIGthbm5kYQ%3D%3D" target="_blank">youtube ಲಿಂಕ್ (fertilizer)</a>
+            </ul>`;
+
+        } else if (prediction === "Healthy") {
+          treatment = `<h4>ನಿಮ್ಮ ಸಸ್ಯ ಆರೋಗ್ಯಕರವಾಗಿದೆ! ಯಾವುದೇ ಚಿಕಿತ್ಸೆ ಅಗತ್ಯವಿಲ್ಲ. ಉತ್ತಮ ಕೆಲಸ ಮುಂದುವರಿಸಿ!</h4>`;
+        }
+
+        treatmentDiv.innerHTML = treatment;
+      } else {
+        resultDiv.innerText = "Error: Unable to process the image.";
+        treatmentDiv.innerHTML = "";
+      }
+    });
+  </script>
+</body>
+</html>
+
